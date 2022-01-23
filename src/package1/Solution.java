@@ -16,86 +16,82 @@ public class Solution {
 
     public static void main(String[] args) {
         greetings();
-        operatingModeSelection();
+        selectOperatingMode();
     }
 
     static void greetings() {
         System.out.println("Доброго времени суток. Данная программа выполняет шифрование и расшифровку текстов в русском алфавите по шифру Цезаря.");
     }
 
-    static void operatingModeSelection() {
+    static void selectOperatingMode() {
         System.out.println("Выберите режим работы программы:");
         System.out.println("1. Шифрование файла с помощью ключа.");
         System.out.println("2. Дешифрование файла с помощью ключа.");
         System.out.println("3. Дешифрование файла брут-форсом.");
         System.out.println("4. Дешифрование файла методом статического анализа.");
-        int сhoiceNomber = numberSelectionResult();
+        int selectResult = readNumberFromConsole();
         Cryptologist cryptologist = new Cryptologist();
-        switch (сhoiceNomber) {
-            case 1:
+        switch (selectResult) {
+            case 1 -> {
                 System.out.println(SOURCE_FILE);
                 pathSource = enterExistFilePath();
                 System.out.println(DEST_FILE);
-                pathDest = enterFilePath();
+                pathDest = enterNewFilePath();
                 System.out.println("Введите ключ:");
-                key = numberSelectionResult();
+                key = readNumberFromConsole();
                 cryptologist.encryptFileWithKey(key, pathSource, pathDest);
-                break;
-            case 2:
+            }
+            case 2 -> {
                 System.out.println(SOURCE_FILE);
                 pathSource = enterExistFilePath();
                 System.out.println(DEST_FILE);
-                pathDest = enterFilePath();
+                pathDest = enterNewFilePath();
                 System.out.println("Введите ключ:");
-                key = numberSelectionResult();
-                key = key - key * 2;
+                key = readNumberFromConsole();
+                key = key - key * 2; //меняем ключ на обратное значение для расшифровки
                 cryptologist.encryptFileWithKey(key, pathSource, pathDest);
-                break;
-            case 3:
+            }
+            case 3 -> {
                 System.out.println(SOURCE_FILE);
                 pathSource = enterExistFilePath();
                 System.out.println(DEST_FILE);
-                pathDest = enterFilePath();
+                pathDest = enterNewFilePath();
                 cryptologist.encryptFileBrutForce(pathSource, pathDest);
-                break;
-            case 4:
+            }
+            case 4 -> {
                 System.out.println(SOURCE_FILE);
                 pathSource = enterExistFilePath();
                 System.out.println(AUXILIARY_FILE);
                 pathAux = enterExistFilePath();
                 System.out.println(DEST_FILE);
-                pathDest = enterFilePath();
+                pathDest = enterNewFilePath();
                 cryptologist.encryptFileStatic(pathSource, pathAux, pathDest);
-                System.out.println("В разработке");
-                break;
-            default:
-                System.out.println("Неверно введено число");
+            }
+            default -> System.out.println("Неверно введено число");
         }
     }
 
-    static int numberSelectionResult() {
+    static int readNumberFromConsole() {
         Scanner scanner = new Scanner(System.in);
         String s = scanner.nextLine();
-        int result = Integer.parseInt(s);
-        return result;
+        return Integer.parseInt(s);
     }
 
     static Path enterExistFilePath() {
         Scanner scanner = new Scanner(System.in);
         Path path = Path.of(scanner.nextLine());
-        if (fileExistCheck(path)) {
+        if (checkFileExist(path)) {
             return path;
         }
         return null;
     }
 
-    static Path enterFilePath() {
+    static Path enterNewFilePath() {
         Scanner scanner = new Scanner(System.in);
-        Path path = Path.of(scanner.nextLine());
-        return path;
+        return Path.of(scanner.nextLine());
     }
 
-    public static boolean fileExistCheck(Path path) {
+    public static boolean checkFileExist(Path path) {
         HashSet<Character> characters = new HashSet<>();
         if (!Files.exists(path)) {
             System.out.println("Файл по указанному пути не существует.");
