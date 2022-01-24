@@ -62,7 +62,7 @@ public class Solution {
                 cryptologist.encryptFileStatic(pathSource, pathAux, pathDest);
             }
             case 0 -> {
-                
+
             }
             default -> {
                 System.out.println("Введите число в диапазоне от 0 до 5");
