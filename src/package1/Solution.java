@@ -8,11 +8,8 @@ public class Solution {
     private static Path pathDest;
     private static Path pathAux;
     private static int key;
-    private static final String SOURCE_FILE = "Введите полный путь к файлу с исходным текстом и его имя:";
-    private static final String DEST_FILE = "Введите полный путь к файлу для записи результата и его имя:";
-    private static final String AUXILIARY_FILE = "Введите полный путь к файлу с вспомогательным текстом и его имя:";
     private static final String ENTER_KEY = "Введите ключ шифрования:";
-    private static final String GOODBAY = "Спасибо за работу с программой. До встречи!";
+    private static final String GOODBYE = "Спасибо за работу с программой. До встречи!";
 
     public static void main(String[] args) {
         outputGreetings();
@@ -39,63 +36,38 @@ public class Solution {
         int selectResult = readNumberFromConsole();
         switch (selectResult) {
             case 1 -> {
-                workOnFirstSelection(cryptologist, pathHandler);
+                pathSource = pathHandler.readExistFilePath();
+                pathDest = pathHandler.readPathToNewFile();
+                System.out.println(ENTER_KEY);
+                key = readNumberFromConsole();
+                cryptologist.encryptFileWithKey(key, pathSource, pathDest);
             }
             case 2 -> {
-                workOnSecondSelection(cryptologist, pathHandler);
+                pathSource = pathHandler.readExistFilePath();
+                pathDest = pathHandler.readPathToNewFile();
+                System.out.println(ENTER_KEY);
+                key = readNumberFromConsole();
+                cryptologist.decryptFileWithKey(key, pathSource, pathDest);
             }
             case 3 -> {
-                workOnThirdSelection(cryptologist, pathHandler);
+                pathSource = pathHandler.readExistFilePath();
+                pathDest = pathHandler.readPathToNewFile();
+                cryptologist.encryptFileBrutForce(pathSource, pathDest);
             }
             case 4 -> {
-                workOnFourSelection(cryptologist, pathHandler);
+                pathSource = pathHandler.readExistFilePath();
+                pathAux = pathHandler.readExistAuxFilePath();
+                pathDest = pathHandler.readPathToNewFile();
+                cryptologist.encryptFileStatic(pathSource, pathAux, pathDest);
             }
             case 0 -> {
-                System.out.println(GOODBAY);
+                System.out.println(GOODBYE);
             }
             default -> {
                 System.out.println("Введите число в диапазоне от 0 до 5");
                 selectOperatingModes();
             }
         }
-    }
-
-    private static void workOnFourSelection(Cryptologist cryptologist, PathHandler pathHandler) {
-        System.out.println(SOURCE_FILE);
-        pathSource = pathHandler.readExistFilePath();
-        System.out.println(AUXILIARY_FILE);
-        pathAux = pathHandler.readExistFilePath();
-        System.out.println(DEST_FILE);
-        pathDest = pathHandler.readPathToNewFile();
-        cryptologist.encryptFileStatic(pathSource, pathAux, pathDest);
-    }
-
-    private static void workOnThirdSelection(Cryptologist cryptologist, PathHandler pathHandler) {
-        System.out.println(SOURCE_FILE);
-        pathSource = pathHandler.readExistFilePath();
-        System.out.println(DEST_FILE);
-        pathDest = pathHandler.readPathToNewFile();
-        cryptologist.encryptFileBrutForce(pathSource, pathDest);
-    }
-
-    private static void workOnSecondSelection(Cryptologist cryptologist, PathHandler pathHandler) {
-        System.out.println(SOURCE_FILE);
-        pathSource = pathHandler.readExistFilePath();
-        System.out.println(DEST_FILE);
-        pathDest = pathHandler.readPathToNewFile();
-        System.out.println(ENTER_KEY);
-        key = readNumberFromConsole();
-        cryptologist.decryptFileWithKey(key, pathSource, pathDest);
-    }
-
-    private static void workOnFirstSelection(Cryptologist cryptologist, PathHandler pathHandler) {
-        System.out.println(SOURCE_FILE);
-        pathSource = pathHandler.readExistFilePath();
-        System.out.println(DEST_FILE);
-        pathDest = pathHandler.readPathToNewFile();
-        System.out.println(ENTER_KEY);
-        key = readNumberFromConsole();
-        cryptologist.encryptFileWithKey(key, pathSource, pathDest);
     }
 
     static int readNumberFromConsole() {
@@ -108,7 +80,7 @@ public class Solution {
         return number;
     }
 
-
+    //сортировка мапы пузырьком
 
 }
 

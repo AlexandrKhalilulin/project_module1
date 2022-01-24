@@ -2,41 +2,72 @@ package package1;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class PathHandler {
+    private static final String SOURCE_FILE = "Введите полный путь к файлу с исходным текстом и его имя:";
+    private static final String DEST_DIR = "Введите путь к директории где будет создан файл с результатом работы программы:";
+    private static final String DEST_FILE = "Введите имя файла с результатом работы программы:";
+    private static final String AUXILIARY_FILE = "Введите полный путь к файлу с вспомогательным текстом и его имя:";
+    private static final String PATH_IS_NOT_A_DIRECTORY = "По указанному пути не директории";
+    private static final String PATH_NOT_EXIST = "Указанный путь не существует";
+    private static final String PATH_IS_NOT_A_FILE = "По указанному пути нет файла";
+
+
     public Path readPathToNewFile() {
+        System.out.println(DEST_DIR);
         Scanner scanner = new Scanner(System.in);
-
-        String string = scanner.nextLine();
-        new Scanner(string).hasNextLine();
-
-        return Path.of(scanner.nextLine());
+        String stringDir = scanner.nextLine();
+        if (!checkDirectoryExist(Path.of(stringDir))) {
+            readPathToNewFile();
+        }
+        System.out.println(DEST_FILE);
+        String stringFileName = scanner.nextLine();
+        return Path.of(stringDir + stringFileName);
     }
 
     public Path readExistFilePath() {
+        System.out.println(SOURCE_FILE);
         Scanner scanner = new Scanner(System.in);
-        Path path = Path.of(scanner.nextLine());
-        if (checkFileExistAlongPath(path)) {
-            return path;
+        String string = scanner.nextLine();
+        if (!checkFileExist(Path.of(string))) {
+            readExistFilePath();
         }
-        return null;
+        return Path.of(string);
     }
 
-    public boolean checkFileExistAlongPath(Path path) {
-        HashSet<Character> characters = new HashSet<>();
-        if (!Files.exists(path)) {
-            System.out.println("Файл по указанному пути не существует.");
-        } else {
+    public boolean checkFileExist(Path path) {
+        if (Files.exists(path)) {
             if (Files.isRegularFile(path)) {
-                System.out.println("Найден файл.");
                 return true;
             } else {
-                System.out.println("Найдена директория. Файл отсутствует.");
+                System.out.println(PATH_IS_NOT_A_FILE);
             }
+        } else {
+            System.out.println(PATH_NOT_EXIST);
         }
         return false;
     }
 
+    public boolean checkDirectoryExist(Path path) {
+        if (Files.exists(path)) {
+            if (Files.isDirectory(path)) return true;
+            else {
+                System.out.println(PATH_IS_NOT_A_DIRECTORY);
+            }
+        } else {
+            System.out.println(PATH_NOT_EXIST);
+        }
+        return false;
+    }
+
+    public Path readExistAuxFilePath() {
+        System.out.println(AUXILIARY_FILE);
+        Scanner scanner = new Scanner(System.in);
+        String string = scanner.nextLine();
+        if (!checkFileExist(Path.of(string))) {
+            readExistFilePath();
+        }
+        return Path.of(string);
+    }
 }

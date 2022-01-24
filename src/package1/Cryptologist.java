@@ -61,20 +61,20 @@ public class Cryptologist {
         char[] chars = stringsDest.toCharArray();
         for (int i = 0; i < chars.length - 1; i++) {
             if (chars[i] == point) {
-                if (i < chars.length & chars[i + 1] == space) {
+                if (chars[i + 1] == space) {
                     pointOrCommaCheckTrue++;
                 }
-                if (i < chars.length & chars[i + 1] != space) {
+                if (chars[i + 1] != space) {
                     pointOrCommaChekFalse++;
                 }
             }
         }
         for (int i = 0; i < chars.length - 1; i++) {
             if (chars[i] == comma) {
-                if (i < chars.length & chars[i + 1] == space) {
+                if (chars[i + 1] == space) {
                     pointOrCommaCheckTrue++;
                 }
-                if (i < chars.length & chars[i + 1] != space) {
+                if (chars[i + 1] != space) {
                     pointOrCommaChekFalse++;
                 }
             }
@@ -235,6 +235,7 @@ public class Cryptologist {
         createDestFile(pathDest, stringBuilder.toString());
     }
 
+    //данный метод создан чисто для удобства чтения программы
     public void decryptFileWithKey(int key, Path pathSource, Path pathDest) {
         key = key - key * 2; //меняем ключ на обратное значение для расшифровки
         encryptFileWithKey(key, pathSource, pathDest);
