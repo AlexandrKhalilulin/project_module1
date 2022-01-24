@@ -9,12 +9,13 @@ public class Solution {
     private static Path pathAux;
     private static int key;
     private static final String ENTER_KEY = "Введите ключ шифрования:";
-    private static final String GOODBYE = "Спасибо за работу с программой. До встречи!";
+    private static final String GOODBYE = "Выбранный вами пункт выполнил свою работу. Спасибо за работу с программой. До встречи!";
 
     public static void main(String[] args) {
         outputGreetings();
         outputOperatingModes();
         selectOperatingModes();
+        System.out.println(GOODBYE);
     }
 
     static void outputGreetings() {
@@ -61,7 +62,7 @@ public class Solution {
                 cryptologist.encryptFileStatic(pathSource, pathAux, pathDest);
             }
             case 0 -> {
-                System.out.println(GOODBYE);
+                
             }
             default -> {
                 System.out.println("Введите число в диапазоне от 0 до 5");
@@ -79,8 +80,6 @@ public class Solution {
         }
         return number;
     }
-
-    //сортировка мапы пузырьком
 
 }
 

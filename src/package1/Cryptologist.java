@@ -196,6 +196,10 @@ public class Cryptologist {
                 auxMap.put(ch, count + 1);
             }
         }
+
+        //реализовать сортировку мапы пузырьком
+        sortMapsUsingBubbleMethod(sourceMap);
+
         //сортируем мапы
         LinkedHashMap<Character, Integer> sortedSourceMap =
                 sourceMap.entrySet().stream()
@@ -209,13 +213,13 @@ public class Cryptologist {
                                 (e1, e2) -> e1, LinkedHashMap::new));
 
         ArrayList<Character> arrayListCharsSource = new ArrayList<>();
-        for (Character ch: sortedSourceMap.keySet()
+        for (Character ch : sortedSourceMap.keySet()
         ) {
             arrayListCharsSource.add(ch);
         }
 
         ArrayList<Character> arrayListCharsAux = new ArrayList<>();
-        for (Character ch: sortedAuxMap.keySet()
+        for (Character ch : sortedAuxMap.keySet()
         ) {
             arrayListCharsAux.add(ch);
         }
@@ -223,10 +227,10 @@ public class Cryptologist {
         //создаем строку сравнивая две мапы
         StringBuilder stringBuilder = new StringBuilder();
         char[] stringCharsSource = source.toLowerCase(Locale.ROOT).toCharArray();
-        for (char ch: stringCharsSource
+        for (char ch : stringCharsSource
         ) {
             for (int i = 0; i < arrayListCharsSource.size(); i++) {
-                if (ch == arrayListCharsSource.get(i)){
+                if (ch == arrayListCharsSource.get(i)) {
                     stringBuilder.append(arrayListCharsAux.get(i));
                 }
             }
@@ -240,4 +244,8 @@ public class Cryptologist {
         key = key - key * 2; //меняем ключ на обратное значение для расшифровки
         encryptFileWithKey(key, pathSource, pathDest);
     }
+
+    public void sortMapsUsingBubbleMethod(HashMap sourceMap) {
+    }
+
 }
