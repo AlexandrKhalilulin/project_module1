@@ -234,4 +234,9 @@ public class Cryptologist {
         //записываем строку в файл
         createDestFile(pathDest, stringBuilder.toString());
     }
+
+    public void decryptFileWithKey(int key, Path pathSource, Path pathDest) {
+        key = key - key * 2; //меняем ключ на обратное значение для расшифровки
+        encryptFileWithKey(key, pathSource, pathDest);
+    }
 }
