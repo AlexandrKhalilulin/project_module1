@@ -8,7 +8,7 @@ public class Solution {
     private static Path pathDest;
     private static Path pathAux;
     private static int key;
-    private static final String ENTER_KEY = "Введите ключ шифрования:";
+    private static final String ENTER_KEY = "Введите ключ шифрования  в диапазоне от 1 до";
     private static final String GOODBYE = "Выбранный вами пункт выполнил свою работу. Спасибо за работу с программой. До встречи!";
 
     public static void main(String[] args) {
@@ -39,14 +39,14 @@ public class Solution {
             case 1 -> {
                 pathSource = pathHandler.readExistFilePath();
                 pathDest = pathHandler.readPathToNewFile();
-                System.out.println(ENTER_KEY);
+                System.out.println(ENTER_KEY + " " + cryptologist.allCharsRu.length() + " :");
                 key = readNumberFromConsole();
                 cryptologist.encryptFileWithKey(key, pathSource, pathDest);
             }
             case 2 -> {
                 pathSource = pathHandler.readExistFilePath();
                 pathDest = pathHandler.readPathToNewFile();
-                System.out.println(ENTER_KEY);
+                System.out.println(ENTER_KEY + " " + cryptologist.allCharsRu.length() + " :");
                 key = readNumberFromConsole();
                 cryptologist.decryptFileWithKey(key, pathSource, pathDest);
             }

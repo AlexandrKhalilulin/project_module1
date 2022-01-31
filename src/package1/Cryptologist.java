@@ -198,7 +198,7 @@ public class Cryptologist {
         }
 
         //реализовать сортировку мапы пузырьком
-        sortMapsUsingBubbleMethod(sourceMap);
+        sortMapUsingBubbleMethod(sourceMap);
 
         //сортируем мапы
         LinkedHashMap<Character, Integer> sortedSourceMap =
@@ -245,7 +245,7 @@ public class Cryptologist {
         encryptFileWithKey(key, pathSource, pathDest);
     }
 
-    public void sortMapsUsingBubbleMethod(HashMap sourceMap) {
+    public void sortMapUsingBubbleMethod(HashMap sourceMap) {
     }
 
 }

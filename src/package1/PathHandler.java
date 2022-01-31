@@ -28,25 +28,26 @@ public class PathHandler {
 
     public Path readExistFilePath() {
         System.out.println(SOURCE_FILE);
-        Scanner scanner = new Scanner(System.in);
-        String string = scanner.nextLine();
-        if (!checkFileExist(Path.of(string))) {
-            readExistFilePath();
-        }
-        return Path.of(string);
+        return checkFileExist();
     }
 
-    public boolean checkFileExist(Path path) {
-        if (Files.exists(path)) {
-            if (Files.isRegularFile(path)) {
-                return true;
+    public Path checkFileExist() {
+        Path resultPath = null;
+        Scanner scanner = new Scanner(System.in);
+        String string = scanner.nextLine();
+
+        if (Files.exists(Path.of(string))) {
+            if (Files.isRegularFile(Path.of(string))) {
+                resultPath = Path.of(string);
             } else {
                 System.out.println(PATH_IS_NOT_A_FILE);
+                checkFileExist();
             }
         } else {
             System.out.println(PATH_NOT_EXIST);
+            checkFileExist();
         }
-        return false;
+        return resultPath;
     }
 
     public boolean checkDirectoryExist(Path path) {
@@ -63,11 +64,6 @@ public class PathHandler {
 
     public Path readExistAuxFilePath() {
         System.out.println(AUXILIARY_FILE);
-        Scanner scanner = new Scanner(System.in);
-        String string = scanner.nextLine();
-        if (!checkFileExist(Path.of(string))) {
-            readExistFilePath();
-        }
-        return Path.of(string);
+        return checkFileExist();
     }
 }
