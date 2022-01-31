@@ -16,29 +16,49 @@ public class Cryptologist {
 
     public void encryptFileWithKey(int key, Path sourcePath, Path destPath) {
         // создаем ориг мапу
-        Map<Character, Integer> originalMap = createOriginalMap();
+        Map<Character, Integer> originalLinkedMap = createOriginalLinkedMap();
         // создаем смещенную мапу
-        Map<Integer, Character> shiftedByKeyMap = createShiftedByKeyMap(key);
+        Map<Integer, Character> shiftedByKeyLinkedMap = createShiftedByKeyLinkedMap(key);
         // cчитываем исходный файл в строку
-        String stringsSource = getString(sourcePath);
+        String stringsSource = getFileContents(sourcePath);
         // создаем строку со смещением
-        String stringsDest = replaceCharsInString(originalMap, shiftedByKeyMap, stringsSource);
+        String stringsDest = replaceCharsInString(originalLinkedMap, shiftedByKeyLinkedMap, stringsSource);
         // создаем конечный файл и записываем в него строку со смещением
         createDestFile(destPath, stringsDest);
     }
 
+    private LinkedHashMap<Character, Integer> createOriginalLinkedMap() {
+        LinkedHashMap<Character, Integer> originalMap = new LinkedHashMap<>();
+        for (int i = 0; i < allCharsRu.length(); i++) {
+            originalMap.put(allCharsRu.charAt(i), i);
+        }
+        return originalMap;
+    }
+
+    private LinkedHashMap<Integer, Character> createShiftedByKeyLinkedMap(int key) {
+        LinkedHashMap<Integer, Character> shiftedMap = new LinkedHashMap<>();
+        int value = 0;
+        for (int i = key; i < allCharsRu.length(); i++) {
+            shiftedMap.put(value++, allCharsRu.charAt(i));
+        }
+        for (int i = 0; i < key; i++) {
+            shiftedMap.put(value++, allCharsRu.charAt(i));
+        }
+        return shiftedMap;
+    }
+
     public void encryptFileBrutForce(Path sourcePath, Path destPath) {
         // создаем ориг мапу
-        Map<Character, Integer> originalMap = createOriginalMap();
+        Map<Character, Integer> originalMap = createOriginalLinkedMap();
         // cчитываем исходный файл в строку
-        String stringsSource = getString(sourcePath);
+        String stringsSource = getFileContents(sourcePath);
         String stringsDest = "";
-        Map<Integer, Character> shiftedByKeyMap = new HashMap<>();
+        Map<Integer, Character> shiftedByKeyMap;
         // перебираем ключ от 0 до длины строки символов
         int count = allCharsRu.length();
         for (int i = 0; i < count; i++) {
             // создаем мапу со смещением
-            shiftedByKeyMap = createShiftedByKeyMap(i);
+            shiftedByKeyMap = createShiftedByKeyLinkedMap(i);
             // создаем строку со смещением
             stringsDest = replaceCharsInString(originalMap, shiftedByKeyMap, stringsSource);
             //проверяем строку
@@ -80,8 +100,7 @@ public class Cryptologist {
             }
         }
         if (pointOrCommaCheckTrue > pointOrCommaChekFalse) flag = true;
-        if (flag) return true;
-        return false;
+        return flag;
     }
 
     private void createDestFile(Path destPath, String stringsDest) {
@@ -96,6 +115,7 @@ public class Cryptologist {
         }
     }
 
+    /*
     private Map<Character, Integer> createOriginalMap() {
         char[] chars = allCharsRu.toCharArray();
         HashMap<Character, Integer> hashMap = new HashMap<>();
@@ -106,6 +126,7 @@ public class Cryptologist {
     }
 
     private Map<Integer, Character> createShiftedByKeyMap(int key) {
+        //реализовать через линкедхэшмап и смещать по ключу оригинальную мапу или оригинальную стрингу символов
         ArrayList<Character> characterList = new ArrayList<>();
         char[] chars = allCharsRu.toCharArray();
         for (char ch : chars
@@ -126,8 +147,9 @@ public class Cryptologist {
         }
         return hashMapDisplaced;
     }
+    */
 
-    private String getString(Path path) {
+    private String getFileContents(Path path) {
         String string = "";
         try {
             string = Files.readString(path);
@@ -241,7 +263,7 @@ public class Cryptologist {
 
     //данный метод создан чисто для удобства чтения программы
     public void decryptFileWithKey(int key, Path pathSource, Path pathDest) {
-        key = key - key * 2; //меняем ключ на обратное значение для расшифровки
+        key = allCharsRu.length() - key; //меняем ключ на обратное значение для расшифровки
         encryptFileWithKey(key, pathSource, pathDest);
     }
 

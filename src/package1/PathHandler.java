@@ -5,29 +5,29 @@ import java.nio.file.Path;
 import java.util.Scanner;
 
 public class PathHandler {
-    private static final String SOURCE_FILE = "Введите полный путь к файлу с исходным текстом и его имя:";
-    private static final String DEST_DIR = "Введите путь к директории где будет создан файл с результатом работы программы:";
-    private static final String DEST_FILE = "Введите имя файла с результатом работы программы:";
-    private static final String AUXILIARY_FILE = "Введите полный путь к файлу с вспомогательным текстом и его имя:";
+    private static final String ENTER_PATH_SOURCE_FILE = "Введите полный путь к файлу с исходным текстом и его имя:";
+    private static final String ENTER_PATH_DEST_DIR = "Введите путь к директории где будет создан файл с результатом работы программы:";
+    private static final String ENTER_PATH_DEST_FILE = "Введите имя файла с результатом работы программы:";
+    private static final String ENTER_PATH_AUXILIARY_FILE = "Введите полный путь к файлу с вспомогательным текстом и его имя:";
     private static final String PATH_IS_NOT_A_DIRECTORY = "По указанному пути не директории";
     private static final String PATH_NOT_EXIST = "Указанный путь не существует";
     private static final String PATH_IS_NOT_A_FILE = "По указанному пути нет файла";
 
 
     public Path readPathToNewFile() {
-        System.out.println(DEST_DIR);
+        System.out.println(ENTER_PATH_DEST_DIR);
         Scanner scanner = new Scanner(System.in);
         String stringDir = scanner.nextLine();
         if (!checkDirectoryExist(Path.of(stringDir))) {
             readPathToNewFile();
         }
-        System.out.println(DEST_FILE);
+        System.out.println(ENTER_PATH_DEST_FILE);
         String stringFileName = scanner.nextLine();
         return Path.of(stringDir + stringFileName);
     }
 
     public Path readExistFilePath() {
-        System.out.println(SOURCE_FILE);
+        System.out.println(ENTER_PATH_SOURCE_FILE);
         return checkFileExist();
     }
 
@@ -63,7 +63,7 @@ public class PathHandler {
     }
 
     public Path readExistAuxFilePath() {
-        System.out.println(AUXILIARY_FILE);
+        System.out.println(ENTER_PATH_AUXILIARY_FILE);
         return checkFileExist();
     }
 }
