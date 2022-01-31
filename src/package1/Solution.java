@@ -37,17 +37,11 @@ public class Solution {
         int selectResult = readNumberFromConsole();
         switch (selectResult) {
             case 1 -> {
-                pathSource = pathHandler.readExistFilePath();
-                pathDest = pathHandler.readPathToNewFile();
-                System.out.println(ENTER_KEY + " " + cryptologist.allCharsRu.length() + " :");
-                key = readNumberFromConsole();
+                getDataFromConsole(cryptologist, pathHandler);
                 cryptologist.encryptFileWithKey(key, pathSource, pathDest);
             }
             case 2 -> {
-                pathSource = pathHandler.readExistFilePath();
-                pathDest = pathHandler.readPathToNewFile();
-                System.out.println(ENTER_KEY + " " + cryptologist.allCharsRu.length() + " :");
-                key = readNumberFromConsole();
+                getDataFromConsole(cryptologist, pathHandler);
                 cryptologist.decryptFileWithKey(key, pathSource, pathDest);
             }
             case 3 -> {
@@ -67,6 +61,20 @@ public class Solution {
             default -> {
                 System.out.println("Введите число в диапазоне от 0 до 5");
                 selectOperatingModes();
+            }
+        }
+    }
+
+    private static void getDataFromConsole(Cryptologist cryptologist, PathHandler pathHandler) {
+        boolean flag = false;
+        pathSource = pathHandler.readExistFilePath();
+        pathDest = pathHandler.readPathToNewFile();
+        while (!flag) {
+            System.out.println(ENTER_KEY + " " + cryptologist.allCharsRu.length() + " :");
+            key = readNumberFromConsole();
+            if (key < 1 | key > cryptologist.allCharsRu.length()) {
+            } else {
+                flag = true;
             }
         }
     }
