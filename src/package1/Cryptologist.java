@@ -20,11 +20,11 @@ public class Cryptologist {
         // создаем смещенную мапу
         Map<Integer, Character> shiftedByKeyLinkedMap = createShiftedByKeyLinkedMap(key);
         // cчитываем исходный файл в строку
-        String stringsSource = getFileContents(sourcePath);
+        String stringsSource = readFileContentToString(sourcePath);
         // создаем строку со смещением
         String stringsDest = replaceCharsInString(originalLinkedMap, shiftedByKeyLinkedMap, stringsSource);
         // создаем конечный файл и записываем в него строку со смещением
-        createDestFile(destPath, stringsDest);
+        createDestFileAndWriteStringInto(destPath, stringsDest);
     }
 
     private LinkedHashMap<Character, Integer> createOriginalLinkedMap() {
@@ -47,31 +47,30 @@ public class Cryptologist {
         return shiftedMap;
     }
 
-    public void encryptFileBrutForce(Path sourcePath, Path destPath) {
+    public void decryptFileBrutForce(Path sourcePath, Path destPath) {
         // создаем ориг мапу
-        Map<Character, Integer> originalMap = createOriginalLinkedMap();
+        LinkedHashMap<Character, Integer> originalMap = createOriginalLinkedMap();
         // cчитываем исходный файл в строку
-        String stringsSource = getFileContents(sourcePath);
+        String stringsSource = readFileContentToString(sourcePath);
         String stringsDest = "";
-        Map<Integer, Character> shiftedByKeyMap;
+        LinkedHashMap<Integer, Character> shiftedByKeyMap;
         // перебираем ключ от 0 до длины строки символов
-        int count = allCharsRu.length();
-        for (int i = 0; i < count; i++) {
-            // создаем мапу со смещением
+        for (int i = 0; i < allCharsRu.length(); i++) {
+            // создаем мапу со смещением на i длину
             shiftedByKeyMap = createShiftedByKeyLinkedMap(i);
             // создаем строку со смещением
             stringsDest = replaceCharsInString(originalMap, shiftedByKeyMap, stringsSource);
-            //проверяем строку
-            if (checkBrutForce(stringsDest)) {
+            //проверяем строку на читаемость
+            if (checkStringForReadability(stringsDest)) {
                 System.out.println("Ключ шифрования: " + (allCharsRu.length() - i));
                 break;
             }
         }
         // создаем конечный файл и записываем в него строки со смещением
-        createDestFile(destPath, stringsDest);
+        createDestFileAndWriteStringInto(destPath, stringsDest);
     }
 
-    private boolean checkBrutForce(String stringsDest) {
+    private boolean checkStringForReadability(String stringsDest) {
         char point = '.';
         char comma = ',';
         char space = ' ';
@@ -79,6 +78,7 @@ public class Cryptologist {
         int pointOrCommaChekFalse = 0;
         boolean flag = false;
         char[] chars = stringsDest.toCharArray();
+        //набиваем кол-ва пройденых проверок на пробел после точки или запятой и кол-во не пройденных проверок
         for (int i = 0; i < chars.length - 1; i++) {
             if (chars[i] == point) {
                 if (chars[i + 1] == space) {
@@ -99,11 +99,12 @@ public class Cryptologist {
                 }
             }
         }
+        // сравниваем суммарное кол-во пройденых и не пройденных
         if (pointOrCommaCheckTrue > pointOrCommaChekFalse) flag = true;
         return flag;
     }
 
-    private void createDestFile(Path destPath, String stringsDest) {
+    private void createDestFileAndWriteStringInto(Path destPath, String stringsDest) {
         try {
             if (Files.exists(destPath)) {
                 Files.delete(destPath);
@@ -149,7 +150,7 @@ public class Cryptologist {
     }
     */
 
-    private String getFileContents(Path path) {
+    private String readFileContentToString(Path path) {
         String string = "";
         try {
             string = Files.readString(path);
@@ -220,7 +221,6 @@ public class Cryptologist {
         }
 
         //реализовать сортировку мапы пузырьком
-        sortMapUsingBubbleMethod(sourceMap);
 
         //сортируем мапы
         LinkedHashMap<Character, Integer> sortedSourceMap =
@@ -234,17 +234,9 @@ public class Cryptologist {
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                                 (e1, e2) -> e1, LinkedHashMap::new));
 
-        ArrayList<Character> arrayListCharsSource = new ArrayList<>();
-        for (Character ch : sortedSourceMap.keySet()
-        ) {
-            arrayListCharsSource.add(ch);
-        }
+        ArrayList<Character> arrayListCharsSource = new ArrayList<>(sortedSourceMap.keySet());
 
-        ArrayList<Character> arrayListCharsAux = new ArrayList<>();
-        for (Character ch : sortedAuxMap.keySet()
-        ) {
-            arrayListCharsAux.add(ch);
-        }
+        ArrayList<Character> arrayListCharsAux = new ArrayList<>(sortedAuxMap.keySet());
 
         //создаем строку сравнивая две мапы
         StringBuilder stringBuilder = new StringBuilder();
@@ -258,16 +250,13 @@ public class Cryptologist {
             }
         }
         //записываем строку в файл
-        createDestFile(pathDest, stringBuilder.toString());
+        createDestFileAndWriteStringInto(pathDest, stringBuilder.toString());
     }
 
     //данный метод создан чисто для удобства чтения программы
     public void decryptFileWithKey(int key, Path pathSource, Path pathDest) {
         key = allCharsRu.length() - key; //меняем ключ на обратное значение для расшифровки
         encryptFileWithKey(key, pathSource, pathDest);
-    }
-
-    public void sortMapUsingBubbleMethod(HashMap sourceMap) {
     }
 
 }

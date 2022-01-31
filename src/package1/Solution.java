@@ -47,7 +47,7 @@ public class Solution {
             case 3 -> {
                 pathSource = pathHandler.readExistFilePath();
                 pathDest = pathHandler.readPathToNewFile();
-                cryptologist.encryptFileBrutForce(pathSource, pathDest);
+                cryptologist.decryptFileBrutForce(pathSource, pathDest);
             }
             case 4 -> {
                 pathSource = pathHandler.readExistFilePath();
@@ -72,8 +72,7 @@ public class Solution {
         while (!flag) {
             System.out.println(ENTER_KEY + " " + cryptologist.allCharsRu.length() + " :");
             key = readNumberFromConsole();
-            if (key < 1 | key > cryptologist.allCharsRu.length()) {
-            } else {
+            if (!(key < 1 | key > cryptologist.allCharsRu.length())) {
                 flag = true;
             }
         }
