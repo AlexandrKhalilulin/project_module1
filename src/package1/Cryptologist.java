@@ -3,7 +3,10 @@ package package1;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Cryptologist {
@@ -224,7 +227,7 @@ public class Cryptologist {
     private void fillMapValues(LinkedHashMap<Character, Integer> map, String string) {
         int count;
         for (int i = 0; i < string.length(); i++) {
-            if (map.containsKey(string.charAt(i))){
+            if (map.containsKey(string.charAt(i))) {
                 count = map.get(string.charAt(i)) + 1;
                 map.put(string.charAt(i), count);
             }
