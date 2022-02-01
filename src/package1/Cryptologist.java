@@ -176,49 +176,17 @@ public class Cryptologist {
     }
 
     public void encryptFileStatic(Path pathSource, Path pathAux, Path pathDest) {
-        //создает сет символов и мапы для двух текстов
-        HashSet<Character> characterHashSet = new HashSet<>();
-        char[] chars = allCharsRu.toLowerCase(Locale.ROOT).toCharArray();
-        for (char ch : chars
-        ) {
-            characterHashSet.add(ch);
-        }
-        HashMap<Character, Integer> sourceMap = new HashMap<>();
-        for (Character ch : characterHashSet
-        ) {
-            sourceMap.put(ch, 0);
-        }
-        HashMap<Character, Integer> auxMap = new HashMap<>();
-        for (Character ch : characterHashSet
-        ) {
-            auxMap.put(ch, 0);
-        }
+        //создаем мапы для двух текстов
+        LinkedHashMap<Character, Integer> auxMap = getCharacterLowerCaseIntegerMap();
+        LinkedHashMap<Character, Integer> sourceMap = getCharacterLowerCaseIntegerMap();
 
-        //создаем мапы по кол-ву вхождения символов в текст
-        String source = "";
-        String aux = "";
-        try {
-            source = Files.readString(pathSource);
-            aux = Files.readString(pathAux);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        char[] charsSource = source.toLowerCase(Locale.ROOT).toCharArray();
-        char[] charsAux = aux.toLowerCase(Locale.ROOT).toCharArray();
-        for (char ch : charsSource
-        ) {
-            if (characterHashSet.contains(ch)) {
-                int count = sourceMap.get(ch);
-                sourceMap.put(ch, count + 1);
-            }
-        }
-        for (char ch : charsAux
-        ) {
-            if (characterHashSet.contains(ch)) {
-                int count = auxMap.get(ch);
-                auxMap.put(ch, count + 1);
-            }
-        }
+        //считываем содержимое файлов в стройку
+        String sourceContent = getContentFromFile(pathSource).toLowerCase(Locale.ROOT);
+        String auxContent = getContentFromFile(pathAux).toLowerCase(Locale.ROOT);
+
+        //наполняем ключи мап по кол-ву вхождения символов в текст
+        fillMapValues(sourceMap, sourceContent);
+        fillMapValues(auxMap, auxContent);
 
         //реализовать сортировку мапы пузырьком
 
@@ -234,13 +202,13 @@ public class Cryptologist {
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                                 (e1, e2) -> e1, LinkedHashMap::new));
 
-        ArrayList<Character> arrayListCharsSource = new ArrayList<>(sortedSourceMap.keySet());
+        LinkedList<Character> arrayListCharsSource = new LinkedList<>(sortedSourceMap.keySet());
 
-        ArrayList<Character> arrayListCharsAux = new ArrayList<>(sortedAuxMap.keySet());
+        LinkedList<Character> arrayListCharsAux = new LinkedList<>(sortedAuxMap.keySet());
 
         //создаем строку сравнивая две мапы
         StringBuilder stringBuilder = new StringBuilder();
-        char[] stringCharsSource = source.toLowerCase(Locale.ROOT).toCharArray();
+        char[] stringCharsSource = sourceContent.toLowerCase(Locale.ROOT).toCharArray();
         for (char ch : stringCharsSource
         ) {
             for (int i = 0; i < arrayListCharsSource.size(); i++) {
@@ -253,7 +221,36 @@ public class Cryptologist {
         createDestFileAndWriteStringInto(pathDest, stringBuilder.toString());
     }
 
-    //данный метод создан чисто для удобства чтения программы
+    private void fillMapValues(LinkedHashMap<Character, Integer> map, String string) {
+        int count;
+        for (int i = 0; i < string.length(); i++) {
+            if (map.containsKey(string.charAt(i))){
+                count = map.get(string.charAt(i)) + 1;
+                map.put(string.charAt(i), count);
+            }
+        }
+    }
+
+    private String getContentFromFile(Path path) {
+        String result = "";
+        try {
+            result = Files.readString(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private LinkedHashMap<Character, Integer> getCharacterLowerCaseIntegerMap() {
+        LinkedHashMap<Character, Integer> sourceMap = new LinkedHashMap<>();
+        String allCharToLowerCase = allCharsRu.toLowerCase(Locale.ROOT);
+        for (int i = 0; i < allCharToLowerCase.length(); i++) {
+            sourceMap.put(allCharToLowerCase.charAt(i), 0);
+        }
+        return sourceMap;
+    }
+
+    //данный метод создан только для удобства чтения программы
     public void decryptFileWithKey(int key, Path pathSource, Path pathDest) {
         key = allCharsRu.length() - key; //меняем ключ на обратное значение для расшифровки
         encryptFileWithKey(key, pathSource, pathDest);

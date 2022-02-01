@@ -31,7 +31,7 @@ public class PathHandler {
         return checkFileExist();
     }
 
-    public Path checkFileExist() {
+    private Path checkFileExist() {
         Path resultPath = null;
         Scanner scanner = new Scanner(System.in);
         String string = scanner.nextLine();
@@ -50,7 +50,7 @@ public class PathHandler {
         return resultPath;
     }
 
-    public boolean checkDirectoryExist(Path path) {
+    private boolean checkDirectoryExist(Path path) {
         if (Files.exists(path)) {
             if (Files.isDirectory(path)) return true;
             else {
