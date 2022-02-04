@@ -28,7 +28,7 @@ public class Solution {
         System.out.println("2. Дешифрование файла с помощью ключа.");
         System.out.println("3. Дешифрование файла брут-форсом.");
         System.out.println("4. Дешифрование файла методом статического анализа.");
-        System.out.println("5. Работа с шифром Вижинера. Экспериментальная функция:");
+        System.out.println("6. Работа с шифром Вижинера. Шифрование текста шифром Вижинера.");
         System.out.println("0. Выход из программы.");
     }
 
@@ -62,6 +62,7 @@ public class Solution {
             case 5 -> {
                 DeVigenere deVigenere = new DeVigenere();
                 deVigenere.initializeVigenereTable();
+                deVigenere.encryptFileWithVigenere();
             }
             default -> {
                 System.out.println("Введите число в диапазоне от 0 до 6");
